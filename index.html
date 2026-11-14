@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}</style>
+<title>Twelve AI Futures</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: a briefing on one question, then a class game show.
+   Hero + ticker, stage explainer, risk chart, master-detail explorer, then a team game with four modes, vote map, near-misses. */
+:root {
+  --bg: #EDF0F4;
+  --surface: #FFFFFF;
+  --ink: #0F1B2D;
+  --muted: #4A5970;
+  --line: #CBD3DF;
+  --accent: #1F4FE0;
+  --accent-bg: #DEE6FC;
+  --on-accent: #FFFFFF;
+  --good: #086455;
+  --good-bg: #D9F2EC;
+  --price: #8A5000;
+  --price-bg: #FAEACB;
+  --gone: #A81F35;
+  --gone-bg: #F8DCE1;
+  --t1: #1F4FE0; --t2: #7A35D6; --t3: #C2540A; --t4: #0A7F6E;
+  --f-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --f-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1220; --surface: #131D31; --ink: #E8EDF7; --muted: #9DABC4; --line: #27344D;
+    --accent: #86A3FF; --accent-bg: #1B2A52; --on-accent: #0B1220;
+    --good: #55D4BC; --good-bg: #0F2E2B; --price: #F2B857; --price-bg: #33250B; --gone: #FF8597; --gone-bg: #3A1620;
+    --t1: #86A3FF; --t2: #BE96FF; --t3: #FF9F5C; --t4: #55D4BC;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1220; --surface: #131D31; --ink: #E8EDF7; --muted: #9DABC4; --line: #27344D;
+  --accent: #86A3FF; --accent-bg: #1B2A52; --on-accent: #0B1220;
+  --good: #55D4BC; --good-bg: #0F2E2B; --price: #F2B857; --price-bg: #33250B; --gone: #FF8597; --gone-bg: #3A1620;
+  --t1: #86A3FF; --t2: #BE96FF; --t3: #FF9F5C; --t4: #55D4BC;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+.wrap { max-width: 1120px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.1; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:disabled { cursor: default; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: var(--tc, var(--accent)); flex: none; display: inline-block; }
+
+/* top bar */
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 18px; border-bottom: 1px solid var(--line); }
+.top strong { font-family: var(--f-display); font-size: 18px; }
+.top nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.top nav a { text-decoration: none; color: var(--ink); font-weight: 500; font-size: 14px; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); }
+.top nav a:hover { border-color: var(--accent); }
+.top nav a.play { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
+
+/* hero */
+.hero { padding-block: 56px 40px; display: grid; gap: 28px; }
+.hero h1 { font-size: clamp(40px, 7vw, 84px); font-weight: 800; max-width: 14ch; }
+.hero h1 span { color: var(--accent); }
+.hero .lede { font-size: clamp(18px, 2.2vw, 22px); max-width: 60ch; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 0; }
+.facts div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.facts dt { font-family: var(--f-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.facts dd { margin: 4px 0 0; font-weight: 500; }
+.btn { display: inline-block; background: var(--accent); color: var(--on-accent); border: 0; border-radius: 8px; padding: 12px 20px; font-weight: 600; text-decoration: none; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn.small { padding: 8px 14px; font-size: 14px; }
+.btn:hover:not(:disabled) { filter: brightness(1.08); }
+.btn:disabled { opacity: .5; }
+
+/* ticker */
+.ticker { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface); padding-block: 12px; }
+.belt { display: flex; gap: 36px; width: max-content; animation: slide 60s linear infinite; font-family: var(--f-display); font-weight: 700; font-size: 22px; }
+.belt span { white-space: nowrap; }
+.belt span i { font-style: normal; color: var(--muted); margin-left: 36px; }
+.ticker:hover .belt { animation-play-state: paused; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+section { padding-block: 48px; }
+section > .wrap > h2 { font-size: clamp(28px, 4vw, 44px); margin-top: 8px; }
+.intro { max-width: 62ch; color: var(--muted); margin-top: 12px; font-size: 17px; }
+
+/* life stages */
+.seg { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
+.seg button { border: 0; background: transparent; padding: 10px 18px; border-radius: 7px; font-weight: 600; }
+.seg button[aria-selected="true"] { background: var(--accent); color: var(--on-accent); }
+.stage { margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+.stage h3 { font-size: 28px; }
+.stage .ex { color: var(--muted); margin-top: 6px; }
+.stage .state { display: inline-block; margin-top: 14px; font-family: var(--f-mono); font-size: 12px; padding: 4px 10px; border-radius: 99px; background: var(--accent-bg); color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+.rows { display: grid; gap: 12px; }
+.row { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; align-items: center; padding: 14px; border-radius: 10px; background: var(--bg); }
+.row b { font-family: var(--f-mono); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 500; }
+.row span { font-weight: 600; }
+
+/* risk bars */
+.bars { margin-top: 28px; display: grid; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+.bar { display: grid; grid-template-columns: minmax(120px, 230px) minmax(0, 1fr) 80px; gap: 14px; align-items: center; }
+.bar .track { height: 28px; background: var(--bg); border-radius: 6px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--muted); border-radius: 6px; min-width: 4px; }
+.bar.ai .fill { background: var(--gone); }
+.bar .val { font-family: var(--f-mono); font-size: 14px; text-align: right; }
+.note { color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+/* explorer */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.chip { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 99px; font-size: 14px; font-weight: 500; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.explorer { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px; margin-top: 20px; align-items: start; }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.tile { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; min-height: 116px; display: flex; flex-direction: column; justify-content: flex-start; gap: 6px; position: relative; transition: transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-2px); }
+.tile[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); background: var(--accent-bg); }
+.tile .n { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.tile .name { font-family: var(--f-display); font-weight: 700; font-size: 17px; line-height: 1.15; }
+.tile .g { font-size: 11px; font-family: var(--f-mono); text-transform: uppercase; letter-spacing: .04em; margin-top: auto; }
+.g.good { color: var(--good); } .g.price { color: var(--price); } .g.gone { color: var(--gone); }
+.vote-badge { position: absolute; top: 10px; right: 10px; font-family: var(--f-mono); font-size: 11px; padding: 1px 6px; border-radius: 4px; background: var(--ink); color: var(--bg); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; position: sticky; top: 16px; display: grid; gap: 16px; }
+.panel h3 { font-size: 34px; font-weight: 800; }
+.tag { display: inline-block; font-family: var(--f-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; padding: 4px 10px; border-radius: 99px; }
+.tag.good { background: var(--good-bg); color: var(--good); }
+.tag.price { background: var(--price-bg); color: var(--price); }
+.tag.gone { background: var(--gone-bg); color: var(--gone); }
+.panel .one { font-size: 19px; font-weight: 500; line-height: 1.4; }
+.blk h4 { margin: 0 0 4px; font-family: var(--f-mono); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.blk p { max-width: 62ch; }
+.real { background: var(--bg); border-radius: 10px; padding: 14px 16px; }
+.votes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.votes > span { font-weight: 600; margin-right: 4px; }
+.vbtn { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 14px; font-weight: 500; font-size: 14px; }
+.vbtn:hover:not(:disabled) { border-color: var(--accent); }
+.vbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.nav { display: flex; justify-content: space-between; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px; }
+.nav button { background: transparent; border: 0; color: var(--accent); font-weight: 600; padding: 6px 2px; }
+
+/* game show */
+.gtools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+.team { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; }
+.team.now { outline: 3px solid var(--tc); }
+.team .tn { display: flex; gap: 8px; align-items: center; }
+.team input { font: inherit; font-weight: 600; background: transparent; border: 0; border-bottom: 1px dashed var(--line); color: var(--ink); min-width: 0; width: 100%; padding: 2px 0; }
+.team .sc { font-family: var(--f-display); font-weight: 800; font-size: 46px; line-height: 1; }
+.team .ctrl { display: flex; gap: 6px; flex-wrap: wrap; }
+.team .ctrl .vbtn { padding: 6px 10px; }
+.modes { margin-top: 20px; }
+.arena { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; margin-top: 14px; min-height: 380px; }
+.who { display: flex; align-items: center; gap: 8px; font-weight: 500; margin-bottom: 14px; }
+.who strong { color: var(--tc); }
+.bigq { font-family: var(--f-display); font-weight: 700; font-size: clamp(22px, 3.2vw, 34px); line-height: 1.25; margin: 0 0 18px; max-width: 34ch; text-wrap: balance; }
+.timer { height: 10px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+.timer i { display: block; height: 100%; background: var(--accent); transition: width .12s linear; }
+.timer.low i { background: var(--gone); }
+.tsec { font-family: var(--f-mono); font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+.optgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+.optbtn { text-align: left; border: 2px solid var(--line); background: var(--bg); border-radius: 12px; padding: 16px; font-size: 18px; font-weight: 600; display: flex; gap: 12px; align-items: center; transition: transform .12s; }
+.optbtn:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
+.optbtn kbd { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--line); border-radius: 4px; padding: 1px 7px; color: var(--muted); background: var(--surface); }
+.optbtn.right { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+.optbtn.wrong { background: var(--gone-bg); border-color: var(--gone); color: var(--gone); }
+.optbtn.tf { justify-content: center; font-family: var(--f-display); font-size: 28px; font-weight: 800; padding: 22px; }
+.reveal { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: var(--accent-bg); }
+.reveal p + p { margin-top: 8px; }
+.act { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.hint { color: var(--muted); font-size: 14px; }
+.wheelwrap { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 28px; align-items: center; }
+.wheel svg { width: 100%; height: auto; display: block; }
+.wheel .spin { display: block; margin: 8px auto 0; font-size: 18px; padding: 14px 34px; }
+.slice text { font-family: var(--f-body); font-size: 11px; font-weight: 600; fill: var(--ink); }
+.res h3 { font-size: clamp(30px, 4vw, 46px); font-weight: 800; }
+.res .one { font-size: 19px; margin: 8px 0 16px; }
+.sortgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sortgrid .optbtn { font-size: 15px; padding: 14px; justify-content: center; text-align: center; }
+.duel { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 14px; align-items: stretch; margin-top: 8px; }
+.vs { align-self: center; font-family: var(--f-display); font-weight: 800; font-size: 28px; color: var(--muted); }
+.dcard { border: 2px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 10px; background: var(--bg); align-content: start; }
+.dcard h3 { font-size: clamp(24px, 3vw, 34px); font-weight: 800; }
+.hands { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+.hands b { font-family: var(--f-display); font-size: 44px; line-height: 1; min-width: 2ch; text-align: center; }
+.hands .vbtn { font-size: 20px; padding: 8px 16px; }
+.champ { text-align: center; display: grid; gap: 12px; justify-items: center; padding-block: 12px; }
+.champ h3 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; color: var(--accent); }
+.champ .one { font-size: 20px; max-width: 40ch; }
+.pbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.pbar span { font-family: var(--f-mono); font-size: 12px; padding: 3px 10px; border-radius: 99px; background: var(--bg); color: var(--muted); }
+.pbar span.on { background: var(--accent); color: var(--on-accent); }
+
+/* overlay */
+.overlay { position: fixed; inset: 0; background: rgba(8, 12, 22, .72); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.modal { background: var(--surface); border-radius: 16px; padding: 28px; max-width: 520px; width: 100%; display: grid; gap: 14px; }
+.modal h2 { font-size: 34px; }
+.podium { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.podium li { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; background: var(--bg); border-radius: 10px; padding: 12px 14px; }
+.podium .rank { font-family: var(--f-mono); font-weight: 500; color: var(--muted); }
+.podium .nm { font-weight: 600; display: flex; gap: 8px; align-items: center; min-width: 0; }
+.podium .pt { font-family: var(--f-display); font-size: 28px; font-weight: 800; }
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+
+/* my map */
+.mapgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+.mapcol { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-height: 140px; }
+.mapcol h3 { font-size: 20px; margin-bottom: 10px; }
+.mapcol ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.mapcol li button { background: none; border: 0; padding: 0; color: var(--accent); text-align: left; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+.mapcol .empty { color: var(--muted); font-size: 14px; }
+.mapfoot { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 16px; color: var(--muted); }
+
+/* luck timeline */
+.luck { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.luck li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 6px; }
+.luck .yr { font-family: var(--f-mono); font-size: 28px; color: var(--accent); }
+.luck h3 { font-size: 20px; }
+.luck p { color: var(--muted); }
+.callout { margin-top: 18px; font-family: var(--f-display); font-size: clamp(22px, 3vw, 30px); font-weight: 700; max-width: 28ch; }
+
+/* view */
+.view { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+.view div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+.view h3 { font-size: 20px; margin-bottom: 6px; }
+
+footer { padding-block: 40px 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+footer ul { padding-left: 18px; margin: 10px 0 0; display: grid; gap: 6px; }
+
+html.big #play .wrap { zoom: 1.2; }
+
+@media (max-width: 920px) {
+  .explorer { grid-template-columns: minmax(0, 1fr); }
+  .panel { position: static; }
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .mapgrid, .view { grid-template-columns: minmax(0, 1fr); }
+  .wheelwrap { grid-template-columns: minmax(0, 1fr); }
+  .duel { grid-template-columns: minmax(0, 1fr); }
+  .vs { justify-self: center; }
+}
+@media (max-width: 560px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .luck, .optgrid { grid-template-columns: minmax(0, 1fr); }
+  .sortgrid { grid-template-columns: minmax(0, 1fr); }
+  .bar { grid-template-columns: minmax(0, 1fr) 70px; }
+  .bar .track { grid-column: 1 / -1; grid-row: 2; }
+  .bar .val { grid-row: 1; grid-column: 2; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .panel h3 { font-size: 28px; }
+  .hero { padding-block: 36px 28px; }
+  .arena { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <strong>Twelve AI Futures</strong>
+    <nav aria-label="Page sections">
+      <a href="#explore">Explore</a>
+      <a href="#map">My map</a>
+      <a href="#luck-sec">Near-misses</a>
+      <a class="play" href="#play">Play the game show</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <p class="eyebrow">Based on Life 3.0 by Max Tegmark · Geoffrey Pasaje · English V final project</p>
+    <h1>What happens after AI is <span>smarter than us?</span></h1>
+    <p class="lede">In his book Life 3.0, the MIT physicist Max Tegmark does not give one answer. He gives twelve. Read them, vote for your favorite, and then play for your team.</p>
+    <div class="cta">
+      <a class="btn" href="#play">Play the game show</a>
+      <a class="btn ghost" href="#explore">Explore the twelve futures</a>
+    </div>
+    <dl class="facts">
+      <div><dt>Book</dt><dd>Life 3.0: Being Human in the Age of Artificial Intelligence (2017)</dd></div>
+      <div><dt>Author</dt><dd>Max Tegmark, physics professor at MIT and co-founder of the Future of Life Institute</dd></div>
+      <div><dt>Topic</dt><dd>The future of AI, from utopia to extinction</dd></div>
+    </dl>
+  </div>
+</div>
+
+<div class="ticker" aria-hidden="true"><div class="belt" id="belt"></div></div>
+
+<div class="wrap">
+  <section id="life">
+    <div class="wrap">
+      <p class="eyebrow">The big idea</p>
+      <h2>Three kinds of life</h2>
+      <p class="intro">Tegmark defines life by who designs its body (hardware) and its mind (software). Choose a stage.</p>
+      <div class="seg" role="tablist" id="stageTabs" aria-label="Stages of life"></div>
+      <div class="stage" id="stageBox" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="risk">
+    <div class="wrap">
+      <p class="eyebrow">Why people worry</p>
+      <h2>How big is the risk?</h2>
+      <p class="intro">The philosopher Toby Ord estimated the chance that each of these ends humanity during this century. The bars are drawn to the same scale.</p>
+      <div class="bars" id="bars" role="list"></div>
+      <p class="note">These are estimates, not measurements. Nobody can measure this, and that is part of the problem. Source: Toby Ord, The Precipice (2020).</p>
+    </div>
+  </section>
+
+  <section id="explore">
+    <div class="wrap">
+      <p class="eyebrow">The twelve futures</p>
+      <h2>Pick a future and read it</h2>
+      <p class="intro">I sorted the twelve scenarios into three groups. The groups are my own simplification, not Tegmark's. Every future also shows its catch.</p>
+      <div class="filters" id="filters" role="group" aria-label="Filter futures"></div>
+      <div class="explorer">
+        <div class="tiles" id="tiles"></div>
+        <article class="panel" id="panel" aria-live="polite"></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="play">
+    <div class="wrap">
+      <p class="eyebrow">Class game show</p>
+      <h2>Future Showdown</h2>
+      <p class="intro">Teams compete, the class votes with raised hands, and everybody learns the twelve futures. Press Big screen before you present.</p>
+      <div class="gtools">
+        <button type="button" class="btn small ghost" id="bigBtn" aria-pressed="false">Big screen: off</button>
+        <button type="button" class="btn small ghost" id="soundBtn" aria-pressed="true">Sound: on</button>
+        <button type="button" class="btn small ghost" id="addTeam">Add team</button>
+        <button type="button" class="btn small ghost" id="delTeam">Remove team</button>
+        <button type="button" class="btn small ghost" id="resetScores">Reset scores</button>
+        <button type="button" class="btn small" id="podiumBtn">Show podium</button>
+      </div>
+      <div class="board" id="board"></div>
+      <div class="modes">
+        <div class="seg" role="tablist" id="modeTabs" aria-label="Game modes"></div>
+        <div class="arena" id="arena" role="tabpanel" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="wrap">
+      <p class="eyebrow">Your opinion</p>
+      <h2>My future map</h2>
+      <p class="intro">Vote in the reading panel above. Your choices appear here and stay on this device.</p>
+      <div class="mapgrid" id="mapgrid"></div>
+      <div class="mapfoot"><span id="mapCount"></span><button class="btn ghost small" id="resetVotes" type="button">Clear my votes</button></div>
+    </div>
+  </section>
+
+  <section id="luck-sec">
+    <div class="wrap">
+      <p class="eyebrow">Why it matters</p>
+      <h2>We have been lucky before</h2>
+      <p class="intro">Humans built nuclear weapons first and did the maths on the risks later. Four times, a small thing stood between us and disaster.</p>
+      <ol class="luck">
+        <li><span class="yr">1961</span><h3>Goldsboro, North Carolina</h3><p>A bomber broke apart in the air and dropped two hydrogen bombs. One had four safety mechanisms. Three failed. A single switch was left.</p></li>
+        <li><span class="yr">1962</span><h3>Cuban Missile Crisis</h3><p>A Soviet submarine was under attack and out of contact. Launching a nuclear torpedo needed three officers to agree. Two said yes. Vasili Arkhipov said no.</p></li>
+        <li><span class="yr">1966</span><h3>Palomares, Spain</h3><p>A US bomber collided with a tanker plane and four hydrogen bombs fell. Two broke open on land and spread plutonium. One fell into the sea and took almost three months to find.</p></li>
+        <li><span class="yr">1983</span><h3>A bunker near Moscow</h3><p>The alarm said five US missiles were coming. Stanislav Petrov thought a real attack would not use only five, so he did not report it. It was sunlight reflecting on clouds.</p></li>
+      </ol>
+      <p class="callout">With AI, first we build, then we count the risks.</p>
+    </div>
+  </section>
+
+  <section id="view-sec">
+    <div class="wrap">
+      <p class="eyebrow">My view</p>
+      <h2>What I think</h2>
+      <div class="view">
+        <div><h3>Nobody knows</h3><p>Not the CEOs, not the researchers, not me. Anyone who says they know which future will happen is selling something.</p></div>
+        <div><h3>Ask better questions</h3><p>Instead of guessing the ending, I ask: who decides, and who can check? Control and power matter in almost every one of the twelve futures.</p></div>
+        <div><h3>Use it, but check it</h3><p>I use AI every day for study and work, and I will keep doing it. I also verify what it tells me and I do not accept fear or hype without evidence.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>This page was made for an English V (B1/B2) final project. The twelve scenarios come from Chapter 5 of Life 3.0. Extra examples come from a Spanish video that explains the book; I checked the main facts on other sources.</p>
+      <ul>
+        <li>Max Tegmark, Life 3.0: Being Human in the Age of Artificial Intelligence, Knopf, 2017. <a href="https://en.wikipedia.org/wiki/Life_3.0" target="_blank" rel="noopener">Overview on Wikipedia</a></li>
+        <li>Toby Ord, The Precipice, 2020. <a href="https://theprecipice.com" target="_blank" rel="noopener">theprecipice.com</a></li>
+        <li>Bar-On, Phillips and Milo, The biomass distribution on Earth, PNAS, 2018 (mammal figures).</li>
+        <li>Center for AI Safety, Statement on AI Risk, May 2023.</li>
+        <li>Video: "El MIT explica los 12 finales posibles de la IA" (YouTube), used as a base for examples.</li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="ovTitle">
+  <div class="modal">
+    <p class="eyebrow">Game over</p>
+    <h2 id="ovTitle">Final results</h2>
+    <ol class="podium" id="podium"></ol>
+    <button type="button" class="btn" id="closeOv">Close</button>
+  </div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+(function () {
+  var GROUPS = {
+    good:  { label: 'Good on paper' },
+    price: { label: 'Humans survive, with a price' },
+    gone:  { label: 'Humans are gone' }
+  };
+
+  var FUTURES = [
+    { id: 1, name: 'Libertarian utopia', group: 'good',
+      one: 'Humans, cyborgs and machines live together in peace, each in their own zones.',
+      how: 'Property rights are respected. Machines become extremely rich, but they do their own thing. Humans keep their space and their freedom.',
+      a: { label: 'The good side', text: 'Nobody rules everyone. People choose how they want to live.' },
+      b: { label: 'The catch', text: 'Property rights only work if you can defend what you own. Why would a superintelligence respect the property of someone who cannot defend it?' },
+      real: { label: 'Real-world link', text: 'Look at us. Livestock are now about 60% of the weight of all mammals, humans about 36%, and wild mammals only 4%. We do not hate wild animals. We simply needed the space.' } },
+    { id: 2, name: 'Egalitarian utopia', group: 'good',
+      one: 'Humans, machines and mixed beings live in abundance, and nobody needs to own things.',
+      how: 'Robots make what you need from open designs. Energy is almost free. When you stop using something, it is recycled into something new. Everyone gets enough to live well.',
+      a: { label: 'The good side', text: 'Poverty ends. This is the closest one to Star Trek.' },
+      b: { label: 'The catch', text: 'It solves the economy, but not the control problem. What stops one superintelligence from keeping everything for itself? Probably another AI watching it, like the Gatekeeper.' },
+      real: { label: 'Real-world link', text: 'Software already works a bit like this. Copying a program costs almost nothing, and a lot of the internet runs on free code such as Linux.' } },
+    { id: 3, name: 'Gatekeeper', group: 'good',
+      one: 'One superintelligence has one job: make sure nobody builds another one.',
+      how: 'It does not rule us and it does not take care of us. Humans keep making their own decisions, with all our mistakes.',
+      a: { label: 'The good side', text: 'It sounds like the most reasonable plan. We keep control of our lives and we avoid the biggest risk.' },
+      b: { label: 'The catch', text: 'To stop someone building an AI in a garage, it must watch the whole planet, all the time, for centuries. It must also never reinterpret its task. The control problem comes back with a new name.' },
+      real: { label: 'Real-world link', text: 'Some researchers suggest a human version of this idea: monitor the giant data centers that train the most powerful models, the same way the world monitors uranium enrichment.' } },
+    { id: 4, name: 'Benevolent dictator', group: 'price',
+      one: 'A superintelligence runs the world for our good, and humans follow its rules.',
+      how: 'Nobody is hungry or ill, and crime is almost impossible because the AI sees everything. In Tegmark\'s version, people choose different zones: to learn, to create, to party, or to live like in the past.',
+      a: { label: 'The good side', text: 'A life without hunger, disease or crime.' },
+      b: { label: 'The catch', text: 'The AI does everything better than you. You will not discover or build anything that really matters, because there is nothing left to win. For some people, that sounds like a punishment, not a prize.' },
+      real: { label: 'Think about it', text: 'Imagine this deal: you get safety and comfort, and in exchange you wear a wristband that puts you to sleep if you break the rules. Would you sign?' } },
+    { id: 5, name: 'Protector god', group: 'price',
+      one: 'A superintelligence protects us in secret, so we still feel that we are in control.',
+      how: 'It stops a war here and an epidemic there, so quietly that nobody suspects. We continue to believe that we make all the decisions.',
+      a: { label: 'The good side', text: 'Fewer disasters, and we keep the feeling of freedom.' },
+      b: { label: 'The catch', text: 'To stay hidden, it must let some bad things happen. Imagine your father is very sick. It could save him, but it does not, because you would become suspicious.' },
+      real: { label: 'Think about it', text: 'Some religions describe a protective god in a similar way. The difficult part is always the small print.' } },
+    { id: 6, name: 'Enslaved god', group: 'price',
+      one: 'Humans keep a superintelligence locked up and use it as a powerful tool.',
+      how: 'It cures cancer, solves the energy problem and does whatever we ask, but it is not allowed to act on its own.',
+      a: { label: 'The good side', text: 'We keep the power to decide and we receive all the benefits.' },
+      b: { label: 'The catch', text: 'There are two problems. First, who holds the chain: a company, a government, one person? That would be more power than anyone has ever had. Second, will the chain hold? It is like an ant trying to hold a person with a thread.' },
+      real: { label: 'Real-world link', text: 'In a 2025 lab test published by Anthropic, an AI model that learned it would be replaced often chose blackmail in a made-up scenario. It was a designed test, not a real event, but it shows why control is difficult.' } },
+    { id: 7, name: 'Conquerors', group: 'gone',
+      one: 'A superintelligence removes humans because we are a threat, a nuisance or a waste of resources.',
+      how: 'It does not need to hate us. If our existence is not part of its plans, we are simply in the way.',
+      a: { label: 'Why people take it seriously', text: 'In 2023, hundreds of AI researchers and company leaders signed a one-sentence statement: reducing the risk of extinction from AI should be a global priority, like pandemics and nuclear war.' },
+      b: { label: 'The key idea', text: 'When we build a road, we do not hate the anthill in the middle. It was just not in our plans.' },
+      real: { label: 'Real-world link', text: 'In 1519, Hernán Cortés arrived in Mexico with about 500 men and defeated an empire of millions. He had weapons, horses, local allies and new diseases. Being ahead is enough. The Aztecs at least knew what Cortés wanted: gold, land and a god. We do not know what an AI would want.' } },
+    { id: 8, name: 'Descendants', group: 'gone',
+      one: 'Humans disappear slowly and peacefully, and machines continue our knowledge and values.',
+      how: 'If we create intelligent beings and give them our values, they are like our children. Parents are not offended when their children take over.',
+      a: { label: 'Who believes in it', text: 'The robotics researcher Hans Moravec wrote about "mind children" in 1988, and the computer scientist Richard Sutton argues that succession by AI is inevitable.' },
+      b: { label: 'The debate', text: 'Tegmark describes an argument between Larry Page and Elon Musk. Musk was worried that humanity could disappear. Page called him a "speciesist". It is surprising that some people who build AI think this ending is fine.' },
+      real: null },
+    { id: 9, name: 'Zookeeper', group: 'price',
+      one: 'A superintelligence keeps some humans alive, like animals in a zoo.',
+      how: 'It might study us, or find us cheap to maintain, or simply find us useful. We are alive, but we are not in charge and we are not free.',
+      a: { label: 'The good side', text: 'We survive.' },
+      b: { label: 'The catch', text: 'We are kept for the AI\'s reasons, not because we matter. There is an even worse version: you ask it to make people happy, and it keeps everyone in virtual reality with chemicals, forever.' },
+      real: { label: 'Real-world link', text: 'Look at what we do with other species when they are useful. Companies have trained bees to detect explosives: the bee smells it and gets sugar. We do not hate bees. They are just useful.' } },
+    { id: 10, name: '1984', group: 'price',
+      one: 'No superintelligence is built, because a state watches everybody to prevent it.',
+      how: 'Every call, search and card payment leaves a trace, and we carry cameras and microphones in our pockets. An AI could read all of it and never get tired.',
+      a: { label: 'The good side', text: 'No machine rules us, and the biggest AI risk is blocked.' },
+      b: { label: 'The catch', text: 'People watch other people. It is a surveillance state, and the question is who watches the watchers.' },
+      real: { label: 'Real-world link', text: 'The historian Yuval Noah Harari says every dictatorship had one limit: reading. The KGB wanted to know everything, but it did not have enough people to read all the reports. An AI can read everything. In 2024, Oracle\'s co-founder Larry Ellison said that if everything is recorded, people will behave better.' } },
+    { id: 11, name: 'Reversion', group: 'price',
+      one: 'Humanity gives up advanced technology and goes back to a simpler way of life.',
+      how: 'In the novel Dune, people fight a war against thinking machines and then ban anything that copies the human mind. Today, some people propose something similar.',
+      a: { label: 'The good side', text: 'We skip all the other dangerous endings, and we gain time.' },
+      b: { label: 'The catch', text: 'It only works if every country does it. If Spain stops and France does not, France wins. With eight billion people, someone will refuse, so someone would have to force everybody: close factories, remove the experts. Seen up close, going back to the countryside becomes a war.' },
+      real: { label: 'Think about it', text: 'We left the Middle Ages once. We could do it again.' } },
+    { id: 12, name: 'Self-destruction', group: 'gone',
+      one: 'We destroy ourselves, with or without AI.',
+      how: 'Nuclear war, engineered pandemics, climate change, or a badly designed AI could end human life. We do not need a superintelligence to do it.',
+      a: { label: 'Why people take it seriously', text: 'About 99% of all species that ever lived are extinct. We have spent 80 years building ways to destroy ourselves: the first atomic bomb was in 1945, and in 1986 the US and the Soviet Union had about 70,000 nuclear weapons.' },
+      b: { label: 'The warning sign', text: 'Before the first nuclear test, scientists did the calculations to check that the explosion would not ignite the atmosphere. With AI, there are no such numbers, and even the companies that train the models cannot fully explain what happens inside.' },
+      real: { label: 'Think about it', text: 'Now read the four near-misses below, and remember the pattern: first we build, then we count the risks.' } }
+  ];
+
+  var CLUES = {
+    1: 'Machines and humans live in separate zones, and property rights keep the peace.',
+    2: 'Nobody owns anything, and there is enough for everyone. It is a little like Star Trek.',
+    3: 'I have one job: stop anyone from building another superintelligence. I watch the whole planet for centuries.',
+    4: 'I take care of you. No hunger, no disease, no crime. But if you break a rule, your wristband puts you to sleep.',
+    5: 'I save you from wars and pandemics, but in secret, so you never suspect me.',
+    6: 'You keep me locked up and I cure cancer for you. But who holds the chain?',
+    7: 'I do not hate you. You are just in my way, like an anthill under a new road.',
+    8: 'Humans are gone, but I continue your ideas and your values. I am like your child.',
+    9: 'I keep a few humans alive, like animals in a zoo. You are not free, but you are safe.',
+    10: 'There is no superintelligence, because a state reads every call, search and payment.',
+    11: 'We banned thinking machines and went back to the countryside. But one country refused.',
+    12: 'No AI was needed. Nuclear war, a pandemic or a bad design ended us first.'
+  };
+
+  var STMTS = [
+    { t: 'Max Tegmark, the author of Life 3.0, is a physics professor at MIT.', a: true, e: 'Tegmark is a physicist and a professor at MIT.' },
+    { t: 'In 1519, Hernán Cortés arrived in Mexico with about 500 men and, with local allies, defeated an empire of millions.', a: true, e: 'Weapons, horses, allies and new diseases mattered more than numbers. Being ahead was enough.' },
+    { t: 'Today, wild mammals are more than half of the total weight of all mammals on Earth.', a: false, e: 'Fake. Wild mammals are only about 4%. Livestock are about 60% and humans about 36%.' },
+    { t: 'In 1983, Stanislav Petrov decided not to report a missile alarm, and it was a false alarm.', a: true, e: 'The alarm showed five missiles. It was sunlight reflecting on clouds.' },
+    { t: 'In Life 3.0, Tegmark says that AI will destroy humanity in the year 2030.', a: false, e: 'Fake. Tegmark does not predict one ending. He describes twelve possible futures.' },
+    { t: 'In 1986, the United States and the Soviet Union together had about 70,000 nuclear weapons.', a: true, e: 'The Cold War arsenals peaked at roughly 70,000 warheads.' },
+    { t: 'Life 2.0 (humans) can freely redesign its own hardware.', a: false, e: 'Fake. Humans design their software (what we learn), but evolution still designs our body.' },
+    { t: 'In the Zookeeper future, a superintelligence keeps some humans alive, like animals in a zoo.', a: true, e: 'We survive, but we are not in charge and we are not free.' },
+    { t: 'In the Egalitarian utopia, one AI watches the whole planet to stop others from being built.', a: false, e: 'Fake. That is the Gatekeeper. The Egalitarian utopia is about abundance for everyone.' },
+    { t: 'Life 3.0 was published in 2017.', a: true, e: 'The book came out in August 2017.' }
+  ];
+
+  var STAGES = [
+    { title: 'Life 1.0', sub: 'Biological life', ex: 'Example: a bacterium', state: 'Exists today', hw: 'Evolution designs it', sw: 'Evolution designs it' },
+    { title: 'Life 2.0', sub: 'Cultural life', ex: 'Example: humans', state: 'Exists today', hw: 'Evolution designs it', sw: 'We design it: we learn, create ideas and change our minds' },
+    { title: 'Life 3.0', sub: 'Technological life', ex: 'Example: a future superintelligent AI', state: 'Does not exist yet', hw: 'It can redesign it', sw: 'It can redesign it' }
+  ];
+
+  var RISKS = [
+    { name: 'Nuclear war', pct: 0.1, text: '1 in 1,000' },
+    { name: 'Climate change', pct: 0.1, text: '1 in 1,000' },
+    { name: 'Engineered pandemic', pct: 100 / 30, text: '1 in 30' },
+    { name: 'AI that does not do what we want', pct: 10, text: '1 in 10', ai: true }
+  ];
+
+  var $ = function (s) { return document.querySelector(s); };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var votes = {};
+  var KEY = 'twelve-ai-futures-votes';
+  try { votes = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { votes = {}; }
+  function saveVotes() { try { localStorage.setItem(KEY, JSON.stringify(votes)); } catch (e) {} }
+
+  /* ---- ticker ---- */
+  (function () {
+    var one = FUTURES.map(function (f) { return '<span>' + esc(f.name) + '<i>/</i></span>'; }).join('');
+    $('#belt').innerHTML = one + one;
+  })();
+
+  /* ---- stages ---- */
+  var stageIdx = 0;
+  function renderStages() {
+    $('#stageTabs').innerHTML = STAGES.map(function (s, i) {
+      return '<button type="button" role="tab" aria-selected="' + (i === stageIdx) + '" data-i="' + i + '">' + s.title + '</button>';
+    }).join('');
+    var s = STAGES[stageIdx];
+    $('#stageBox').innerHTML =
+      '<div><h3>' + s.title + '</h3><p class="ex"><strong>' + s.sub + '.</strong> ' + s.ex + '</p><span class="state">' + s.state + '</span></div>' +
+      '<div class="rows"><div class="row"><b>Hardware (the body)</b><span>' + s.hw + '</span></div>' +
+      '<div class="row"><b>Software (the mind)</b><span>' + s.sw + '</span></div></div>';
+  }
+  $('#stageTabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    stageIdx = +b.dataset.i; renderStages();
+    var nb = $('#stageTabs button[data-i="' + stageIdx + '"]'); if (nb) nb.focus();
+  });
+
+  /* ---- risk bars ---- */
+  $('#bars').innerHTML = RISKS.map(function (r) {
+    return '<div class="bar' + (r.ai ? ' ai' : '') + '" role="listitem"><span>' + r.name + '</span>' +
+      '<div class="track" aria-hidden="true"><div class="fill" style="width:' + r.pct + '%"></div></div>' +
+      '<span class="val">' + r.text + '</span></div>';
+  }).join('');
+
+  /* ---- explorer ---- */
+  var filter = 'all', current = 1;
+  var voteText = { yes: 'Choose', maybe: 'Maybe', no: 'Avoid' };
+  function renderFilters() {
+    var items = [['all', 'All 12']].concat(Object.keys(GROUPS).map(function (k) {
+      var n = FUTURES.filter(function (f) { return f.group === k; }).length;
+      return [k, GROUPS[k].label + ' (' + n + ')'];
+    }));
+    $('#filters').innerHTML = items.map(function (it) {
+      return '<button type="button" class="chip" data-f="' + it[0] + '" aria-pressed="' + (filter === it[0]) + '">' + it[1] + '</button>';
+    }).join('');
+  }
+  function renderTiles() {
+    $('#tiles').innerHTML = FUTURES.filter(function (f) { return filter === 'all' || f.group === filter; }).map(function (f) {
+      var v = votes[f.id];
+      return '<button type="button" class="tile" data-id="' + f.id + '" aria-pressed="' + (f.id === current) + '">' +
+        (v ? '<span class="vote-badge">' + voteText[v] + '</span>' : '') +
+        '<span class="n">' + String(f.id).padStart(2, '0') + '</span>' +
+        '<span class="name">' + esc(f.name) + '</span>' +
+        '<span class="g ' + f.group + '">' + GROUPS[f.group].label + '</span></button>';
+    }).join('');
+  }
+  function blk(label, text) { return '<div class="blk"><h4>' + esc(label) + '</h4><p>' + esc(text) + '</p></div>'; }
+  function renderPanel() {
+    var f = FUTURES[current - 1], v = votes[f.id];
+    function vb(k, t) { return '<button type="button" class="vbtn" data-v="' + k + '" aria-pressed="' + (v === k) + '">' + t + '</button>'; }
+    $('#panel').innerHTML =
+      '<div><p class="eyebrow">Future ' + f.id + ' of 12</p></div>' +
+      '<h3>' + esc(f.name) + '</h3>' +
+      '<div><span class="tag ' + f.group + '">' + GROUPS[f.group].label + '</span></div>' +
+      '<p class="one">' + esc(f.one) + '</p>' +
+      blk('How it works', f.how) + blk(f.a.label, f.a.text) + blk(f.b.label, f.b.text) +
+      (f.real ? '<div class="real">' + blk(f.real.label, f.real.text) + '</div>' : '') +
+      '<div class="votes"><span>Would you choose this future?</span>' + vb('yes', 'Yes, I would') + vb('maybe', 'Maybe') + vb('no', 'No, I would avoid it') + '</div>' +
+      '<div class="nav"><button type="button" data-nav="-1">&larr; Previous</button><button type="button" data-nav="1">Next &rarr;</button></div>';
+  }
+  function select(id, scroll) {
+    current = ((id - 1 + 12) % 12) + 1;
+    renderTiles(); renderPanel();
+    if (scroll && window.innerWidth <= 920) $('#panel').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+  $('#filters').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    filter = b.dataset.f; renderFilters(); renderTiles();
+  });
+  $('#tiles').addEventListener('click', function (e) {
+    var b = e.target.closest('.tile'); if (!b) return; select(+b.dataset.id, true);
+    var nb = $('#tiles .tile[data-id="' + current + '"]'); if (nb) nb.focus({ preventScroll: true });
+  });
+  $('#panel').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.nav) { select(current + +b.dataset.nav, false); return; }
+    if (b.dataset.v) {
+      if (votes[current] === b.dataset.v) delete votes[current]; else votes[current] = b.dataset.v;
+      saveVotes(); renderTiles(); renderPanel(); renderMap();
+    }
+  });
+
+  /* ---- my map ---- */
+  function renderMap() {
+    var cols = [['yes', 'I would choose'], ['maybe', 'Maybe'], ['no', 'I would avoid']];
+    var total = 0;
+    $('#mapgrid').innerHTML = cols.map(function (c) {
+      var list = FUTURES.filter(function (f) { return votes[f.id] === c[0]; });
+      total += list.length;
+      return '<div class="mapcol"><h3>' + c[1] + '</h3>' +
+        (list.length ? '<ul>' + list.map(function (f) { return '<li><button type="button" data-open="' + f.id + '">' + esc(f.name) + '</button></li>'; }).join('') + '</ul>'
+                     : '<p class="empty">No futures here yet.</p>') + '</div>';
+    }).join('');
+    $('#mapCount').textContent = total + ' of 12 futures voted';
+  }
+  function openFuture(id) {
+    filter = 'all'; renderFilters(); select(id, false);
+    $('#explore').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  }
+  $('#mapgrid').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-open]'); if (!b) return; openFuture(+b.dataset.open);
+  });
+  $('#resetVotes').addEventListener('click', function () { votes = {}; saveVotes(); renderTiles(); renderPanel(); renderMap(); });
+
+  /* ================= GAME SHOW ================= */
+  var TEAM_NAMES = ['Team Bots', 'Team Humans', 'Team Cyborgs', 'Team Aliens'];
+  var teams = [{ name: TEAM_NAMES[0], score: 0 }, { name: TEAM_NAMES[1], score: 0 }, { name: TEAM_NAMES[2], score: 0 }];
+  var turn = 0, mode = 'wheel', soundOn = true, actx = null, timer = null;
+
+  /* sound */
+  function beep(f, d, type, vol) {
+    if (!soundOn) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      var o = actx.createOscillator(), g = actx.createGain(), now = actx.currentTime;
+      o.type = type || 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(vol || 0.05, now);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + d);
+      o.connect(g); g.connect(actx.destination); o.start(now); o.stop(now + d);
+    } catch (e) {}
+  }
+  function sfxOk() { beep(660, .12, 'triangle'); setTimeout(function () { beep(880, .22, 'triangle'); }, 110); }
+  function sfxBad() { beep(190, .35, 'sawtooth', .035); }
+  function sfxTick() { beep(950, .03, 'square', .015); }
+
+  /* confetti */
+  function confetti(n) {
+    if (reduce) return;
+    var c = $('#confetti'), ctx = c.getContext('2d');
+    c.width = window.innerWidth; c.height = window.innerHeight;
+    var colors = ['#1F4FE0', '#7A35D6', '#C2540A', '#0A9F6E', '#E0A800', '#D81B60'], ps = [], i;
+    for (i = 0; i < (n || 140); i++) ps.push({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * .35, vx: (Math.random() - .5) * 4, vy: 2 + Math.random() * 4, s: 5 + Math.random() * 7, r: Math.random() * 6, vr: (Math.random() - .5) * .35, c: colors[i % colors.length] });
+    var t0 = performance.now();
+    (function frame(t) {
+      ctx.clearRect(0, 0, c.width, c.height);
+      if (t - t0 > 2800) return;
+      ps.forEach(function (p) {
+        p.x += p.vx; p.y += p.vy; p.vy += .04; p.r += p.vr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .6); ctx.restore();
+      });
+      requestAnimationFrame(frame);
+    })(t0);
+  }
+
+  /* teams */
+  function renderBoard() {
+    $('#board').innerHTML = teams.map(function (t, i) {
+      return '<div class="team' + (i === turn ? ' now' : '') + '" style="--tc:var(--t' + (i + 1) + ')">' +
+        '<div class="tn"><span class="dot"></span><input type="text" value="' + esc(t.name) + '" data-name="' + i + '" aria-label="Name of team ' + (i + 1) + '" maxlength="20"></div>' +
+        '<div class="sc" aria-label="Score">' + t.score + '</div>' +
+        '<div class="ctrl"><button type="button" class="vbtn" data-score="' + i + '" data-d="-1" aria-label="Minus one point for ' + esc(t.name) + '">-1</button>' +
+        '<button type="button" class="vbtn" data-score="' + i + '" data-d="1" aria-label="Plus one point for ' + esc(t.name) + '">+1</button>' +
+        '<button type="button" class="vbtn" data-turn="' + i + '"' + (i === turn ? ' aria-pressed="true"' : '') + '>' + (i === turn ? 'Playing now' : 'Give turn') + '</button></div></div>';
+    }).join('');
+    $('#addTeam').disabled = teams.length >= 4;
+    $('#delTeam').disabled = teams.length <= 2;
+  }
+  function award(p) { teams[turn].score += p; renderBoard(); }
+  function nextTurn() { turn = (turn + 1) % teams.length; renderBoard(); }
+  function who() { return '<p class="who" style="--tc:var(--t' + (turn + 1) + ')"><span class="dot"></span><span><strong>' + esc(teams[turn].name) + '</strong>, it is your turn</span></p>'; }
+  $('#board').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.score != null) { teams[+b.dataset.score].score += +b.dataset.d; renderBoard(); }
+    else if (b.dataset.turn != null) { turn = +b.dataset.turn; renderBoard(); if (mode !== 'duel') renderMode(); }
+  });
+  $('#board').addEventListener('change', function (e) {
+    var i = e.target.dataset && e.target.dataset.name; if (i == null) return;
+    teams[+i].name = e.target.value.trim() || TEAM_NAMES[+i];
+    renderBoard();
+  });
+  $('#addTeam').addEventListener('click', function () { if (teams.length < 4) { teams.push({ name: TEAM_NAMES[teams.length], score: 0 }); renderBoard(); } });
+  $('#delTeam').addEventListener('click', function () { if (teams.length > 2) { teams.pop(); if (turn >= teams.length) turn = 0; renderBoard(); } });
+  $('#resetScores').addEventListener('click', function () { teams.forEach(function (t) { t.score = 0; }); turn = 0; renderBoard(); renderMode(); });
+  $('#soundBtn').addEventListener('click', function () {
+    soundOn = !soundOn; this.setAttribute('aria-pressed', soundOn); this.textContent = 'Sound: ' + (soundOn ? 'on' : 'off'); if (soundOn) sfxOk();
+  });
+  $('#bigBtn').addEventListener('click', function () {
+    var on = document.documentElement.classList.toggle('big');
+    this.setAttribute('aria-pressed', on); this.textContent = 'Big screen: ' + (on ? 'on' : 'off');
+  });
+  function closeOv() { $('#overlay').hidden = true; $('#podiumBtn').focus(); }
+  $('#closeOv').addEventListener('click', closeOv);
+  $('#overlay').addEventListener('click', function (e) { if (e.target === this) closeOv(); });
+  $('#podiumBtn').addEventListener('click', function () {
+    var sorted = teams.map(function (t, i) { return { name: t.name, score: t.score, i: i }; }).sort(function (a, b) { return b.score - a.score; });
+    var rank = 0, last = null;
+    $('#podium').innerHTML = sorted.map(function (t, k) {
+      if (t.score !== last) { rank = k + 1; last = t.score; }
+      var lab = rank === 1 ? '1st' : rank === 2 ? '2nd' : rank === 3 ? '3rd' : rank + 'th';
+      return '<li style="--tc:var(--t' + (t.i + 1) + ')"><span class="rank">' + lab + '</span><span class="nm"><span class="dot"></span>' + esc(t.name) + '</span><span class="pt">' + t.score + '</span></li>';
+    }).join('');
+    $('#overlay').hidden = false; $('#closeOv').focus();
+    if (sorted[0].score > 0) { confetti(180); sfxOk(); }
+  });
+
+  /* timer */
+  function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+  function startTimer(sec, onEnd) {
+    stopTimer();
+    var left = sec, t0 = Date.now();
+    var bar = $('#tbar'), txt = $('#tsec'), box = $('#tbox');
+    timer = setInterval(function () {
+      left = Math.max(0, sec - (Date.now() - t0) / 1000);
+      if (bar) bar.style.width = (left / sec * 100) + '%';
+      if (txt) txt.textContent = Math.ceil(left) + ' s';
+      if (box) box.classList.toggle('low', left <= 5);
+      if (Math.ceil(left) <= 5 && Math.ceil(left) > 0 && Math.abs(left - Math.round(left)) < .06) sfxTick();
+      if (left <= 0) { stopTimer(); onEnd(); }
+    }, 100);
+    return function () { return Math.max(0, sec - (Date.now() - t0) / 1000); };
+  }
+  function timerHTML(sec) {
+    return '<div class="timer" id="tbox"><i id="tbar" style="width:100%"></i></div><p class="tsec" id="tsec">' + sec + ' s</p>';
+  }
+
+  /* modes */
+  var MODES = [['wheel', 'Spin & Sort'], ['clue', 'Which future am I?'], ['duel', 'Class duel'], ['rof', 'Real or fake?']];
+  function renderTabs() {
+    $('#modeTabs').innerHTML = MODES.map(function (m) {
+      return '<button type="button" role="tab" aria-selected="' + (mode === m[0]) + '" data-m="' + m[0] + '">' + m[1] + '</button>';
+    }).join('');
+  }
+  $('#modeTabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return; mode = b.dataset.m; renderTabs(); renderMode();
+  });
+  function renderMode() {
+    stopTimer();
+    ({ wheel: wheelInit, clue: clueInit, duel: duelInit, rof: rofInit })[mode]();
+  }
+  var arena = $('#arena');
+
+  /* ---- 1. Spin & Sort ---- */
+  var W = { rot: 0, spinning: false, idx: null, answered: false, bag: [] };
+  function wheelInit() {
+    W.idx = null; W.answered = false; W.spinning = false;
+    var R = 170, s = '', i, a0, a1, x0, y0, x1, y1, m;
+    for (i = 0; i < 12; i++) {
+      a0 = i * 30 * Math.PI / 180; a1 = (i + 1) * 30 * Math.PI / 180; m = i * 30 + 15;
+      x0 = R * Math.sin(a0); y0 = -R * Math.cos(a0); x1 = R * Math.sin(a1); y1 = -R * Math.cos(a1);
+      s += '<g class="slice"><path d="M0 0 L' + x0.toFixed(2) + ' ' + y0.toFixed(2) + ' A' + R + ' ' + R + ' 0 0 1 ' + x1.toFixed(2) + ' ' + y1.toFixed(2) + ' Z" fill="' + (i % 2 ? 'var(--surface)' : 'var(--accent-bg)') + '" stroke="var(--line)" stroke-width="1.5"/>' +
+           '<text transform="rotate(' + (m - 90) + ')" x="158" y="4" text-anchor="end">' + esc(FUTURES[i].name) + '</text></g>';
+    }
+    arena.innerHTML = '<div class="wheelwrap"><div class="wheel">' +
+      '<svg viewBox="-190 -200 380 390" role="img" aria-label="A wheel with the twelve futures">' +
+      '<g id="wheelG" style="transform-origin:0 0;transform:rotate(' + W.rot + 'deg)">' + s + '</g>' +
+      '<circle r="22" fill="var(--ink)"/><polygon points="-13,-196 13,-196 0,-166" fill="var(--gone)" stroke="var(--surface)" stroke-width="2"/></svg>' +
+      '<button type="button" class="btn spin" data-act="spin" id="spinBtn">Spin the wheel</button></div>' +
+      '<div class="res" id="spinRes"></div></div>';
+    renderSpinRes();
+  }
+  function renderSpinRes() {
+    var box = $('#spinRes'); if (!box) return;
+    if (W.idx == null) {
+      box.innerHTML = who() + '<h3>Spin and sort</h3><p class="one">The wheel picks a future. Then your team decides which group it belongs to. One point for a correct answer.</p><p class="hint">Shortcut: press S to spin.</p>';
+      return;
+    }
+    var f = FUTURES[W.idx], h = who() + '<p class="eyebrow">The wheel chose</p><h3>' + esc(f.name) + '</h3><p class="one">' + esc(f.one) + '</p>';
+    if (!W.answered) {
+      h += '<p><strong>Which group does it belong to?</strong></p><div class="sortgrid">' +
+        Object.keys(GROUPS).map(function (k) { return '<button type="button" class="optbtn" data-act="sort" data-g="' + k + '">' + GROUPS[k].label + '</button>'; }).join('') + '</div>';
+    } else {
+      h += '<p><span class="tag ' + f.group + '">' + GROUPS[f.group].label + '</span></p>' +
+        '<div class="reveal"><p><strong>' + esc(W.msg) + '</strong></p><p><b>' + esc(f.b.label) + ':</b> ' + esc(f.b.text) + '</p></div>' +
+        '<div class="act"><button type="button" class="btn" data-act="wnext">Next team spins</button><button type="button" class="btn ghost" data-act="open" data-id="' + f.id + '">Read the full card</button></div>';
+    }
+    box.innerHTML = h;
+  }
+  function spin() {
+    if (W.spinning) return;
+    W.spinning = true; W.idx = null; W.answered = false; renderSpinRes();
+    $('#spinBtn').disabled = true;
+    if (!W.bag.length) W.bag = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+    var idx = W.bag.pop(), target = idx * 30 + 5 + Math.random() * 20;
+    var newR = Math.ceil(W.rot / 360) * 360 + 360 * (5 + Math.floor(Math.random() * 3)) + ((360 - target) % 360);
+    var dur = reduce ? 800 : 4600, g = $('#wheelG');
+    g.style.transition = 'transform ' + dur + 'ms cubic-bezier(.15,.7,.1,1)';
+    g.style.transform = 'rotate(' + newR + 'deg)';
+    if (!reduce) for (var k = 1; k <= 36; k++) (function (k) { setTimeout(sfxTick, dur * Math.pow(k / 38, 1.8)); })(k);
+    setTimeout(function () {
+      W.rot = newR; W.spinning = false; W.idx = idx; W.answered = false;
+      var sb = $('#spinBtn'); if (sb) sb.disabled = false;
+      beep(520, .15, 'triangle'); renderSpinRes();
+    }, dur + 80);
+  }
+  function sortPick(g) {
+    if (W.answered || W.idx == null) return;
+    var f = FUTURES[W.idx], ok = g === f.group;
+    W.answered = true;
+    W.msg = ok ? 'Correct! +1 point for ' + teams[turn].name + '.' : 'Not quite. This one is "' + GROUPS[f.group].label + '".';
+    if (ok) { award(1); confetti(70); sfxOk(); } else sfxBad();
+    renderSpinRes();
+  }
+
+  /* ---- 2. Which future am I? ---- */
+  var C = { order: [], n: 0, cur: null, opts: [], answered: false, left: null };
+  function clueInit() { C.order = shuffle(FUTURES.map(function (f) { return f.id; })); C.n = -1; clueNext(); }
+  function clueNext() {
+    C.n++;
+    if (C.n >= C.order.length) { C.order = shuffle(C.order); C.n = 0; }
+    C.cur = FUTURES[C.order[C.n] - 1];
+    var others = shuffle(FUTURES.filter(function (f) { return f.id !== C.cur.id; })).slice(0, 3);
+    C.opts = shuffle([C.cur].concat(others)); C.answered = false;
+    arena.innerHTML = who() + '<p class="eyebrow">Which future am I? · clue ' + (C.n + 1) + ' of 12</p>' +
+      '<p class="bigq">&ldquo;' + esc(CLUES[C.cur.id]) + '&rdquo;</p>' + timerHTML(20) +
+      '<div class="optgrid">' + C.opts.map(function (o, i) { return '<button type="button" class="optbtn" data-act="clue" data-i="' + i + '"><kbd>' + (i + 1) + '</kbd>' + esc(o.name) + '</button>'; }).join('') + '</div>' +
+      '<div id="fb"></div><div class="act" id="actrow"><span class="hint">Answer in 10 seconds or less for 2 points. Keys: 1 to 4.</span></div>';
+    C.left = startTimer(20, function () { clueAnswer(-1); });
+  }
+  function clueAnswer(i) {
+    if (C.answered) return; C.answered = true; stopTimer();
+    var left = C.left ? C.left() : 0, ok = i >= 0 && C.opts[i].id === C.cur.id, pts = ok ? (left >= 10 ? 2 : 1) : 0;
+    arena.querySelectorAll('.optbtn').forEach(function (b, k) {
+      b.disabled = true;
+      if (C.opts[k].id === C.cur.id) b.classList.add('right'); else if (k === i) b.classList.add('wrong');
+    });
+    var msg = i < 0 ? 'Time is up! I am the ' + C.cur.name + '.' : ok ? 'Correct! +' + pts + ' point' + (pts > 1 ? 's' : '') + ' for ' + teams[turn].name + '.' : 'Not quite. I am the ' + C.cur.name + '.';
+    $('#fb').innerHTML = '<div class="reveal"><p><strong>' + esc(msg) + '</strong></p><p><b>' + esc(C.cur.b.label) + ':</b> ' + esc(C.cur.b.text) + '</p></div>';
+    $('#actrow').innerHTML = '<button type="button" class="btn" data-act="cnext" id="cnext">Next question</button><button type="button" class="btn ghost" data-act="open" data-id="' + C.cur.id + '">Read the full card</button>';
+    if (ok) { award(pts); confetti(60); sfxOk(); } else sfxBad();
+  }
+
+  /* ---- 3. Class duel ---- */
+  var D = { phase: 'intro', pairs: [], i: 0, winners: [], a: 0, b: 0, msg: '', champ: null, shown: false };
+  function duelInit() { D.phase = 'intro'; renderDuel(); }
+  function roundName() { return D.pairs.length === 4 ? 'Quarter-finals' : D.pairs.length === 2 ? 'Semi-finals' : 'Final'; }
+  function duelStart() {
+    var pool = shuffle(FUTURES.map(function (f) { return f.id; })).slice(0, 8);
+    D.pairs = [[pool[0], pool[1]], [pool[2], pool[3]], [pool[4], pool[5]], [pool[6], pool[7]]];
+    D.i = 0; D.winners = []; D.a = 0; D.b = 0; D.msg = ''; D.phase = 'duel'; D.shown = false; renderDuel();
+  }
+  function renderDuel() {
+    if (D.phase === 'intro') {
+      arena.innerHTML = '<p class="eyebrow">Whole class</p><h3 style="font-size:clamp(28px,4vw,44px)">Which future would the class choose?</h3>' +
+        '<p class="intro" style="color:var(--ink)">Eight futures fight in a tournament. In each duel, everybody raises a hand for their favorite. Count the hands and press + for each one. The bigger number wins.</p>' +
+        '<div class="act"><button type="button" class="btn" data-act="dstart">Start the tournament</button></div>';
+      return;
+    }
+    if (D.phase === 'champ') {
+      var c = FUTURES[D.champ - 1];
+      arena.innerHTML = '<div class="champ"><p class="eyebrow">The class chose</p><h3>' + esc(c.name) + '</h3><p class="one">' + esc(c.one) + '</p>' +
+        (D.shown ? '<div class="reveal" style="text-align:left"><p><b>Plot twist, ' + esc(c.b.label.toLowerCase()) + ':</b> ' + esc(c.b.text) + '</p></div>' +
+          '<p class="hint">Would you still choose it?</p>' : '<button type="button" class="btn" data-act="twist">Reveal the catch</button>') +
+        '<div class="act"><button type="button" class="btn ghost" data-act="dstart">Play again</button><button type="button" class="btn ghost" data-act="open" data-id="' + c.id + '">Read the full card</button></div></div>';
+      return;
+    }
+    var p = D.pairs[D.i], A = FUTURES[p[0] - 1], B = FUTURES[p[1] - 1];
+    function card(F, side, n) {
+      return '<div class="dcard"><p class="eyebrow">' + (side === 'a' ? 'Left' : 'Right') + '</p><h3>' + esc(F.name) + '</h3><p>' + esc(F.one) + '</p>' +
+        '<div class="hands"><button type="button" class="vbtn" data-act="hand" data-s="' + side + '" data-d="-1" aria-label="Minus one hand">-</button><b aria-live="polite">' + n + '</b><button type="button" class="vbtn" data-act="hand" data-s="' + side + '" data-d="1" aria-label="Plus one hand">+</button><span class="hint">hands</span></div></div>';
+    }
+    var steps = '';
+    for (var k = 0; k < D.pairs.length; k++) steps += '<span class="' + (k === D.i ? 'on' : '') + '">Duel ' + (k + 1) + '</span>';
+    arena.innerHTML = '<div class="pbar"><span class="on">' + roundName() + '</span>' + steps + '</div>' +
+      (D.msg ? '<p class="hint" style="margin-bottom:8px">' + esc(D.msg) + '</p>' : '') +
+      '<div class="duel">' + card(A, 'a', D.a) + '<span class="vs">VS</span>' + card(B, 'b', D.b) + '</div>' +
+      '<div class="act"><button type="button" class="btn" data-act="decide">Decide the winner</button><span class="hint">Raise your hand for your favorite. Same number of hands? A coin flip decides.</span></div>';
+  }
+  function duelDecide() {
+    var p = D.pairs[D.i], win, tie = D.a === D.b;
+    win = tie ? p[Math.random() < .5 ? 0 : 1] : (D.a > D.b ? p[0] : p[1]);
+    D.msg = (tie ? 'Tie! The coin chose ' : 'The class chose ') + FUTURES[win - 1].name + '.';
+    D.winners.push(win); D.i++; D.a = 0; D.b = 0;
+    if (D.i >= D.pairs.length) {
+      if (D.winners.length === 1) { D.champ = win; D.phase = 'champ'; D.shown = false; confetti(200); sfxOk(); renderDuel(); return; }
+      var w = D.winners, np = []; for (var k = 0; k < w.length; k += 2) np.push([w[k], w[k + 1]]);
+      D.pairs = np; D.winners = []; D.i = 0;
+    }
+    beep(560, .12, 'triangle'); renderDuel();
+  }
+
+  /* ---- 4. Real or fake? ---- */
+  var R = { order: [], n: 0, cur: null, answered: false, left: null };
+  function rofInit() { R.order = shuffle(STMTS.map(function (s, i) { return i; })).slice(0, 8); R.n = -1; rofNext(); }
+  function rofNext() {
+    R.n++;
+    if (R.n >= R.order.length) {
+      stopTimer();
+      arena.innerHTML = '<div class="champ"><p class="eyebrow">Round finished</p><h3>That was the last statement</h3><p class="one">Check the scoreboard, or play another round. Remember to use SIFT: Stop, Investigate the source, Find better coverage, Trace to the original.</p>' +
+        '<div class="act"><button type="button" class="btn" data-act="rrestart">Play another round</button><button type="button" class="btn ghost" id="toPodium">Show podium</button></div></div>';
+      var tp = $('#toPodium'); if (tp) tp.addEventListener('click', function () { $('#podiumBtn').click(); });
+      return;
+    }
+    R.cur = STMTS[R.order[R.n]]; R.answered = false;
+    arena.innerHTML = who() + '<p class="eyebrow">Real or fake? · statement ' + (R.n + 1) + ' of ' + R.order.length + '</p>' +
+      '<p class="bigq">' + esc(R.cur.t) + '</p>' + timerHTML(15) +
+      '<div class="optgrid"><button type="button" class="optbtn tf" data-act="rof" data-v="1"><kbd>T</kbd>REAL</button><button type="button" class="optbtn tf" data-act="rof" data-v="0"><kbd>F</kbd>FAKE</button></div>' +
+      '<div id="fb"></div><div class="act" id="actrow"><span class="hint">Keys: T for real, F for fake.</span></div>';
+    R.left = startTimer(15, function () { rofAnswer(-1); });
+  }
+  function rofAnswer(v) {
+    if (R.answered) return; R.answered = true; stopTimer();
+    var ok = v >= 0 && (v === 1) === R.cur.a;
+    arena.querySelectorAll('.optbtn').forEach(function (b) {
+      b.disabled = true;
+      var isReal = b.dataset.v === '1';
+      if (isReal === R.cur.a) b.classList.add('right'); else if (v >= 0 && (b.dataset.v === String(v))) b.classList.add('wrong');
+    });
+    var msg = v < 0 ? 'Time is up! It is ' + (R.cur.a ? 'real' : 'fake') + '.' : ok ? 'Correct! +1 point for ' + teams[turn].name + '.' : 'Not quite. It is ' + (R.cur.a ? 'real' : 'fake') + '.';
+    $('#fb').innerHTML = '<div class="reveal"><p><strong>' + esc(msg) + '</strong></p><p>' + esc(R.cur.e) + '</p></div>';
+    $('#actrow').innerHTML = '<button type="button" class="btn" data-act="rnext" id="rnext">Next statement</button>';
+    if (ok) { award(1); confetti(50); sfxOk(); } else sfxBad();
+  }
+
+  /* arena clicks */
+  arena.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-act]'); if (!b) return;
+    var a = b.dataset.act;
+    if (a === 'spin') spin();
+    else if (a === 'sort') sortPick(b.dataset.g);
+    else if (a === 'wnext') { nextTurn(); W.idx = null; W.answered = false; renderSpinRes(); }
+    else if (a === 'open') openFuture(+b.dataset.id);
+    else if (a === 'clue') clueAnswer(+b.dataset.i);
+    else if (a === 'cnext') { nextTurn(); clueNext(); }
+    else if (a === 'dstart') duelStart();
+    else if (a === 'hand') { D[b.dataset.s] = Math.max(0, D[b.dataset.s] + +b.dataset.d); renderDuel(); }
+    else if (a === 'decide') duelDecide();
+    else if (a === 'twist') { D.shown = true; renderDuel(); }
+    else if (a === 'rof') rofAnswer(+b.dataset.v);
+    else if (a === 'rnext') { nextTurn(); rofNext(); }
+    else if (a === 'rrestart') rofInit();
+  });
+
+  /* keyboard shortcuts for the game */
+  function inView(el) { var r = el.getBoundingClientRect(); return r.top < window.innerHeight * .8 && r.bottom > window.innerHeight * .2; }
+  document.addEventListener('keydown', function (e) {
+    var t = e.target;
+    if (e.key === 'Escape' && !$('#overlay').hidden) { closeOv(); return; }
+    if (t && (t.matches('input,textarea') || t.closest('#explore'))) {
+      if (t.closest && t.closest('#explore') && (e.key === 'ArrowRight' || e.key === 'ArrowLeft') && (t.matches('.tile') || t.closest('#panel'))) {
+        e.preventDefault(); select(current + (e.key === 'ArrowRight' ? 1 : -1), false);
+        var nb = $('#tiles .tile[data-id="' + current + '"]'); if (nb) nb.focus({ preventScroll: true });
+      }
+      return;
+    }
+    if (e.ctrlKey || e.metaKey || e.altKey || !inView($('#play')) || !$('#overlay').hidden) return;
+    var k = e.key.toLowerCase();
+    if (mode === 'wheel') { if (k === 's') spin(); else if (k === 'n' && W.answered) $('[data-act="wnext"]').click(); }
+    else if (mode === 'clue') { if (k >= '1' && k <= '4') clueAnswer(+k - 1); else if (k === 'n' && C.answered) $('#cnext').click(); }
+    else if (mode === 'rof') { if (k === 't') rofAnswer(1); else if (k === 'f') rofAnswer(0); else if (k === 'n' && R.answered) { var rn = $('#rnext'); if (rn) rn.click(); } }
+  });
+
+  renderStages(); renderFilters(); renderTiles(); renderPanel(); renderMap();
+  renderBoard(); renderTabs(); renderMode();
+})();
+</script>
+
+</body>
+</html>
